@@ -1,1 +1,12 @@
+sudo: required
 language: java
+
+services:
+  - docker
+
+after_success:
+  - docker build --tag=target-app .
+  - docker run --name=my-target-app -p 8080:8080 target-app
+  - docker exec -it my-target-app /execute-tests.sh
+  - docker ps
+  - docker kill my-target-app
